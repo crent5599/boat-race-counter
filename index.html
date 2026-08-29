@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#06376f">
+<title>競艇予想 6艇カウンター</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#edf4fa;color:#172338;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif}
+header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,#052b59,#1164a9);color:#fff;padding:12px 10px;box-shadow:0 3px 12px #0003}
+h1{font-size:19px;margin:0;font-weight:900}.sub{font-size:11px;margin-top:3px}
+main{max-width:1000px;margin:auto;padding:9px 8px 135px}
+.card{background:#fff;border-radius:14px;margin:8px 0;padding:10px;box-shadow:0 2px 8px #1232}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+input{height:39px;width:100%;border:1px solid #c9d7e6;border-radius:8px;padding:0 9px;font-size:16px}
+.scoreHead,.total{display:grid;grid-template-columns:minmax(190px,1fr) repeat(6,68px);gap:5px;align-items:center}
+.headText,.totalLabel{font-weight:900;color:#07376f;font-size:13px}
+.boatHead{text-align:center;font-weight:900;padding:7px 2px;border-radius:8px;font-size:12px}
+.b1{background:#fff;border:1px solid #aaa}.b2{background:#222;color:#fff}.b3{background:#d92c31;color:#fff}
+.b4{background:#1e73bd;color:#fff}.b5{background:#f0d000}.b6{background:#3e9848;color:#fff}
+.total{margin-bottom:8px}.totalLabel{font-size:13px}
+.totalBox{text-align:center;border:2px solid #b9cde1;border-radius:9px;padding:5px;background:#f8fbff}
+.totalBox .s{font-size:21px;font-weight:900;color:#07376f}.totalBox .r{font-size:10px;font-weight:800}
+.criterion{border:1px solid #d6e1ed;border-radius:10px;margin:7px 0;overflow:hidden;background:#fff}
+.criterionText{padding:8px 9px;background:#f2f7fb}.title{font-size:12px;font-weight:900;color:#07376f}
+.desc{font-size:11px;margin-top:2px;line-height:1.4}
+.counters{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;padding:6px}
+.boatCell{text-align:center;border-radius:8px;background:#f8fbff;padding:4px 3px;border:1px solid #e1e9f2}
+.mini{display:inline-flex;width:23px;height:23px;border-radius:6px;align-items:center;justify-content:center;font-size:11px;font-weight:900}
+.num{font-size:18px;font-weight:900;line-height:23px;color:#6f7d8e}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-top:3px}
+button{height:31px;border:0;border-radius:6px;font-size:18px;font-weight:900;color:#fff}
+.plus{background:#14864e}.minus{background:#d73a3a}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px}
+.action{height:42px;border:0;border-radius:9px;background:#07376f;color:#fff;font-size:14px;font-weight:900}
+.action.alt{background:#fff;color:#07376f;border:1px solid #9db3ca}
+.bottom{position:fixed;bottom:8px;left:8px;right:8px;z-index:25;background:#fff;border:2px solid #07376f;border-radius:14px;padding:9px;box-shadow:0 5px 20px #0003}
+.rankline{display:flex;justify-content:space-between;align-items:center}.pick{font-size:21px;font-weight:900;color:#07376f}
+.note{font-size:10px;color:#647487;line-height:1.5;margin-top:6px}
+.tag{padding:3px 7px;border-radius:20px;font-size:10px;font-weight:800}
+.good{background:#ffe0e0;color:#b40000}.ok{background:#fff0d3;color:#925600}.maybe{background:#fffbd1;color:#645900}.bad{background:#dcecff;color:#155c9a}
+@media(max-width:700px){.scoreHead,.total{grid-template-columns:minmax(145px,1fr) repeat(6,48px)}.boatHead{font-size:10px}.counters{gap:2px;padding:4px}.boatCell{padding:3px 1px}button{height:30px}}
+@media(max-width:430px){.scoreHead,.total{grid-template-columns:minmax(112px,1fr) repeat(6,39px)}.title{font-size:11px}.desc{font-size:10px}.mini{width:20px;height:20px;font-size:10px}.num{font-size:16px}button{font-size:16px;height:29px}}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="競艇予想">
+<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+<header><h1>🚤 競艇予想 6艇カウンター</h1><div class="sub">各項目ごとに「該当する艇」の ＋ / − をタップするだけ</div></header>
+<main>
+<section class="card"><div class="info"><input id="venue" placeholder="競艇場（例：児島）"><input id="race" placeholder="レース（例：12R）"></div></section>
+
+<section class="card">
+<div class="scoreHead">
+<div class="headText">各項目をカウント</div>
+<div class="boatHead b1">1号艇</div><div class="boatHead b2">2号艇</div><div class="boatHead b3">3号艇</div>
+<div class="boatHead b4">4号艇</div><div class="boatHead b5">5号艇</div><div class="boatHead b6">6号艇</div>
+</div>
+</section>
+
+<section class="card">
+<div class="total"><div class="totalLabel">🏆 現在の合計点</div><div class="totalBox"><div class="s" id="score1">0</div><div class="r" id="rank1">—</div></div><div class="totalBox"><div class="s" id="score2">0</div><div class="r" id="rank2">—</div></div><div class="totalBox"><div class="s" id="score3">0</div><div class="r" id="rank3">—</div></div><div class="totalBox"><div class="s" id="score4">0</div><div class="r" id="rank4">—</div></div><div class="totalBox"><div class="s" id="score5">0</div><div class="r" id="rank5">—</div></div><div class="totalBox"><div class="s" id="score6">0</div><div class="r" id="rank6">—</div></div></div>
+<div id="criteria"><div class="criterion"><div class="criterionText"><div class="title">① 場ごとの特徴確認</div><div class="desc">逃げ率55%以上 → 1号艇 +1 ／ 50%以下 → 1号艇 -1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c0_1">0</div><div class="btns"><button class="minus" onclick="change(0,1,-1)">−</button><button class="plus" onclick="change(0,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c0_2">0</div><div class="btns"><button class="minus" onclick="change(0,2,-1)">−</button><button class="plus" onclick="change(0,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c0_3">0</div><div class="btns"><button class="minus" onclick="change(0,3,-1)">−</button><button class="plus" onclick="change(0,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c0_4">0</div><div class="btns"><button class="minus" onclick="change(0,4,-1)">−</button><button class="plus" onclick="change(0,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c0_5">0</div><div class="btns"><button class="minus" onclick="change(0,5,-1)">−</button><button class="plus" onclick="change(0,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c0_6">0</div><div class="btns"><button class="minus" onclick="change(0,6,-1)">−</button><button class="plus" onclick="change(0,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">② 全国勝率の確認</div><div class="desc">6割超え → +1 ／ 8割超え → +2 ／ 1号艇の1着率55%以下 → -1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c1_1">0</div><div class="btns"><button class="minus" onclick="change(1,1,-1)">−</button><button class="plus" onclick="change(1,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c1_2">0</div><div class="btns"><button class="minus" onclick="change(1,2,-1)">−</button><button class="plus" onclick="change(1,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c1_3">0</div><div class="btns"><button class="minus" onclick="change(1,3,-1)">−</button><button class="plus" onclick="change(1,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c1_4">0</div><div class="btns"><button class="minus" onclick="change(1,4,-1)">−</button><button class="plus" onclick="change(1,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c1_5">0</div><div class="btns"><button class="minus" onclick="change(1,5,-1)">−</button><button class="plus" onclick="change(1,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c1_6">0</div><div class="btns"><button class="minus" onclick="change(1,6,-1)">−</button><button class="plus" onclick="change(1,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">③ 今節の成績確認</div><div class="desc">2着以上の回数 × +1 ／ 1号艇から1着外なら -1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c2_1">0</div><div class="btns"><button class="minus" onclick="change(2,1,-1)">−</button><button class="plus" onclick="change(2,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c2_2">0</div><div class="btns"><button class="minus" onclick="change(2,2,-1)">−</button><button class="plus" onclick="change(2,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c2_3">0</div><div class="btns"><button class="minus" onclick="change(2,3,-1)">−</button><button class="plus" onclick="change(2,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c2_4">0</div><div class="btns"><button class="minus" onclick="change(2,4,-1)">−</button><button class="plus" onclick="change(2,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c2_5">0</div><div class="btns"><button class="minus" onclick="change(2,5,-1)">−</button><button class="plus" onclick="change(2,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c2_6">0</div><div class="btns"><button class="minus" onclick="change(2,6,-1)">−</button><button class="plus" onclick="change(2,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">④ モーター・ボートの連立確認</div><div class="desc">3連率60%以上なら +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c3_1">0</div><div class="btns"><button class="minus" onclick="change(3,1,-1)">−</button><button class="plus" onclick="change(3,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c3_2">0</div><div class="btns"><button class="minus" onclick="change(3,2,-1)">−</button><button class="plus" onclick="change(3,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c3_3">0</div><div class="btns"><button class="minus" onclick="change(3,3,-1)">−</button><button class="plus" onclick="change(3,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c3_4">0</div><div class="btns"><button class="minus" onclick="change(3,4,-1)">−</button><button class="plus" onclick="change(3,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c3_5">0</div><div class="btns"><button class="minus" onclick="change(3,5,-1)">−</button><button class="plus" onclick="change(3,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c3_6">0</div><div class="btns"><button class="minus" onclick="change(3,6,-1)">−</button><button class="plus" onclick="change(3,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑤ スタート展示の確認</div><div class="desc">行き足・伸び足・出足の良い艇に +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c4_1">0</div><div class="btns"><button class="minus" onclick="change(4,1,-1)">−</button><button class="plus" onclick="change(4,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c4_2">0</div><div class="btns"><button class="minus" onclick="change(4,2,-1)">−</button><button class="plus" onclick="change(4,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c4_3">0</div><div class="btns"><button class="minus" onclick="change(4,3,-1)">−</button><button class="plus" onclick="change(4,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c4_4">0</div><div class="btns"><button class="minus" onclick="change(4,4,-1)">−</button><button class="plus" onclick="change(4,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c4_5">0</div><div class="btns"><button class="minus" onclick="change(4,5,-1)">−</button><button class="plus" onclick="change(4,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c4_6">0</div><div class="btns"><button class="minus" onclick="change(4,6,-1)">−</button><button class="plus" onclick="change(4,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑥ 当日の風波の確認</div><div class="desc">追い風3m以上：スロー側 +1 ／ 向かい風3m以上：ダッシュ側 +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c5_1">0</div><div class="btns"><button class="minus" onclick="change(5,1,-1)">−</button><button class="plus" onclick="change(5,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c5_2">0</div><div class="btns"><button class="minus" onclick="change(5,2,-1)">−</button><button class="plus" onclick="change(5,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c5_3">0</div><div class="btns"><button class="minus" onclick="change(5,3,-1)">−</button><button class="plus" onclick="change(5,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c5_4">0</div><div class="btns"><button class="minus" onclick="change(5,4,-1)">−</button><button class="plus" onclick="change(5,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c5_5">0</div><div class="btns"><button class="minus" onclick="change(5,5,-1)">−</button><button class="plus" onclick="change(5,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c5_6">0</div><div class="btns"><button class="minus" onclick="change(5,6,-1)">−</button><button class="plus" onclick="change(5,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑥ 当日の風波の確認</div><div class="desc">右横風3m以上：ダッシュ側 +1 ／ 左横風3m以上：スロー側 +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c6_1">0</div><div class="btns"><button class="minus" onclick="change(6,1,-1)">−</button><button class="plus" onclick="change(6,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c6_2">0</div><div class="btns"><button class="minus" onclick="change(6,2,-1)">−</button><button class="plus" onclick="change(6,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c6_3">0</div><div class="btns"><button class="minus" onclick="change(6,3,-1)">−</button><button class="plus" onclick="change(6,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c6_4">0</div><div class="btns"><button class="minus" onclick="change(6,4,-1)">−</button><button class="plus" onclick="change(6,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c6_5">0</div><div class="btns"><button class="minus" onclick="change(6,5,-1)">−</button><button class="plus" onclick="change(6,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c6_6">0</div><div class="btns"><button class="minus" onclick="change(6,6,-1)">−</button><button class="plus" onclick="change(6,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑥ 当日の風波の確認</div><div class="desc">各風5m以上：B1・B2選手 -1 ／ 波高4cm以上：1号艇 -1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c7_1">0</div><div class="btns"><button class="minus" onclick="change(7,1,-1)">−</button><button class="plus" onclick="change(7,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c7_2">0</div><div class="btns"><button class="minus" onclick="change(7,2,-1)">−</button><button class="plus" onclick="change(7,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c7_3">0</div><div class="btns"><button class="minus" onclick="change(7,3,-1)">−</button><button class="plus" onclick="change(7,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c7_4">0</div><div class="btns"><button class="minus" onclick="change(7,4,-1)">−</button><button class="plus" onclick="change(7,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c7_5">0</div><div class="btns"><button class="minus" onclick="change(7,5,-1)">−</button><button class="plus" onclick="change(7,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c7_6">0</div><div class="btns"><button class="minus" onclick="change(7,6,-1)">−</button><button class="plus" onclick="change(7,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑦ 平均スタートの確認</div><div class="desc">平均ST .13以下 → +1 ／ .20以上 → -1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c8_1">0</div><div class="btns"><button class="minus" onclick="change(8,1,-1)">−</button><button class="plus" onclick="change(8,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c8_2">0</div><div class="btns"><button class="minus" onclick="change(8,2,-1)">−</button><button class="plus" onclick="change(8,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c8_3">0</div><div class="btns"><button class="minus" onclick="change(8,3,-1)">−</button><button class="plus" onclick="change(8,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c8_4">0</div><div class="btns"><button class="minus" onclick="change(8,4,-1)">−</button><button class="plus" onclick="change(8,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c8_5">0</div><div class="btns"><button class="minus" onclick="change(8,5,-1)">−</button><button class="plus" onclick="change(8,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c8_6">0</div><div class="btns"><button class="minus" onclick="change(8,6,-1)">−</button><button class="plus" onclick="change(8,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑧ 展示タイムの確認</div><div class="desc">展示タイム1番 → +2 ／ 2番 → +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c9_1">0</div><div class="btns"><button class="minus" onclick="change(9,1,-1)">−</button><button class="plus" onclick="change(9,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c9_2">0</div><div class="btns"><button class="minus" onclick="change(9,2,-1)">−</button><button class="plus" onclick="change(9,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c9_3">0</div><div class="btns"><button class="minus" onclick="change(9,3,-1)">−</button><button class="plus" onclick="change(9,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c9_4">0</div><div class="btns"><button class="minus" onclick="change(9,4,-1)">−</button><button class="plus" onclick="change(9,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c9_5">0</div><div class="btns"><button class="minus" onclick="change(9,5,-1)">−</button><button class="plus" onclick="change(9,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c9_6">0</div><div class="btns"><button class="minus" onclick="change(9,6,-1)">−</button><button class="plus" onclick="change(9,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑧ 展示タイムの確認</div><div class="desc">1周・半周タイム1番 → +2 ／ 2番 → +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c10_1">0</div><div class="btns"><button class="minus" onclick="change(10,1,-1)">−</button><button class="plus" onclick="change(10,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c10_2">0</div><div class="btns"><button class="minus" onclick="change(10,2,-1)">−</button><button class="plus" onclick="change(10,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c10_3">0</div><div class="btns"><button class="minus" onclick="change(10,3,-1)">−</button><button class="plus" onclick="change(10,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c10_4">0</div><div class="btns"><button class="minus" onclick="change(10,4,-1)">−</button><button class="plus" onclick="change(10,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c10_5">0</div><div class="btns"><button class="minus" onclick="change(10,5,-1)">−</button><button class="plus" onclick="change(10,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c10_6">0</div><div class="btns"><button class="minus" onclick="change(10,6,-1)">−</button><button class="plus" onclick="change(10,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑧ 展示タイムの確認</div><div class="desc">周り足タイム1番 → +2 ／ 2番 → +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c11_1">0</div><div class="btns"><button class="minus" onclick="change(11,1,-1)">−</button><button class="plus" onclick="change(11,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c11_2">0</div><div class="btns"><button class="minus" onclick="change(11,2,-1)">−</button><button class="plus" onclick="change(11,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c11_3">0</div><div class="btns"><button class="minus" onclick="change(11,3,-1)">−</button><button class="plus" onclick="change(11,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c11_4">0</div><div class="btns"><button class="minus" onclick="change(11,4,-1)">−</button><button class="plus" onclick="change(11,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c11_5">0</div><div class="btns"><button class="minus" onclick="change(11,5,-1)">−</button><button class="plus" onclick="change(11,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c11_6">0</div><div class="btns"><button class="minus" onclick="change(11,6,-1)">−</button><button class="plus" onclick="change(11,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑧ 展示タイムの確認</div><div class="desc">直線タイム1番 → +2 ／ 2番 → +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c12_1">0</div><div class="btns"><button class="minus" onclick="change(12,1,-1)">−</button><button class="plus" onclick="change(12,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c12_2">0</div><div class="btns"><button class="minus" onclick="change(12,2,-1)">−</button><button class="plus" onclick="change(12,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c12_3">0</div><div class="btns"><button class="minus" onclick="change(12,3,-1)">−</button><button class="plus" onclick="change(12,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c12_4">0</div><div class="btns"><button class="minus" onclick="change(12,4,-1)">−</button><button class="plus" onclick="change(12,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c12_5">0</div><div class="btns"><button class="minus" onclick="change(12,5,-1)">−</button><button class="plus" onclick="change(12,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c12_6">0</div><div class="btns"><button class="minus" onclick="change(12,6,-1)">−</button><button class="plus" onclick="change(12,6,1)">＋</button></div></div></div></div><div class="criterion"><div class="criterionText"><div class="title">⑧ 展示タイムの確認</div><div class="desc">風が強い日（4m以上）なら直線1番 → +1</div></div><div class="counters"><div class="boatCell"><span class="mini b1">1</span><div class="num" id="c13_1">0</div><div class="btns"><button class="minus" onclick="change(13,1,-1)">−</button><button class="plus" onclick="change(13,1,1)">＋</button></div></div><div class="boatCell"><span class="mini b2">2</span><div class="num" id="c13_2">0</div><div class="btns"><button class="minus" onclick="change(13,2,-1)">−</button><button class="plus" onclick="change(13,2,1)">＋</button></div></div><div class="boatCell"><span class="mini b3">3</span><div class="num" id="c13_3">0</div><div class="btns"><button class="minus" onclick="change(13,3,-1)">−</button><button class="plus" onclick="change(13,3,1)">＋</button></div></div><div class="boatCell"><span class="mini b4">4</span><div class="num" id="c13_4">0</div><div class="btns"><button class="minus" onclick="change(13,4,-1)">−</button><button class="plus" onclick="change(13,4,1)">＋</button></div></div><div class="boatCell"><span class="mini b5">5</span><div class="num" id="c13_5">0</div><div class="btns"><button class="minus" onclick="change(13,5,-1)">−</button><button class="plus" onclick="change(13,5,1)">＋</button></div></div><div class="boatCell"><span class="mini b6">6</span><div class="num" id="c13_6">0</div><div class="btns"><button class="minus" onclick="change(13,6,-1)">−</button><button class="plus" onclick="change(13,6,1)">＋</button></div></div></div></div></div>
+<div class="actions"><button class="action" onclick="resetAll()">全てリセット</button><button class="action alt" onclick="save()">途中保存</button></div>
+<div class="note">＋は有利、−は不利。各項目を何回でもタップできます。合計点が高い艇ほど上位候補として表示します。</div>
+</section>
+
+<section class="card"><div class="headText">🎯 自動ランキング</div><div id="ranking" style="margin-top:7px"></div></section>
+
+
+<section class="card" style="border:2px solid #07376f">
+  <div class="headText">📱 iPhoneでアプリのように使う</div>
+  <div style="font-size:12px;line-height:1.7;margin-top:7px">
+    ① Safariでこのサイトを開く<br>
+    ② 画面下の「共有」ボタン（□↑）をタップ<br>
+    ③ 「ホーム画面に追加」をタップ<br>
+    ④ 「追加」をタップ<br>
+    → ホーム画面の「競艇予想」アイコンから直接起動できます。
+  </div>
+</section>
+<div class="bottom"><div class="rankline"><span>本命候補</span><span class="pick" id="pick">—</span></div>
+<div class="rankline"><span id="topInfo">カウンターを押すとランキング表示</span><span id="triple">—</span></div></div>
+</main>
+
+<script>
+const ROWS=14;
+const C=Array.from({length:ROWS},()=>Array(6).fill(0));
+const scores=Array(6).fill(0);
+
+function change(row,boat,delta){
+  C[row][boat-1]+=delta;
+  scores[boat-1]+=delta;
+  update();
+}
+function judgment(s){
+  if(s>=5)return ['◎ 有力','good'];
+  if(s>=2)return ['○ 有望','ok'];
+  if(s>=-1)return ['△ 展開次第','maybe'];
+  return ['× 不利','bad'];
+}
+function update(){
+  for(let r=0;r<ROWS;r++)for(let b=1;b<=6;b++){
+    const e=document.getElementById(`c${r}_${b}`);
+    const v=C[r][b-1];
+    e.textContent=(v>0?'+':'')+v;
+    e.style.color=v===0?'#6f7d8e':(v>0?'#14864e':'#d73a3a');
+  }
+  const order=[0,1,2,3,4,5].sort((a,b)=>scores[b]-scores[a]);
+  const ranks=Array(6);order.forEach((v,i)=>ranks[v]=i+1);
+  for(let i=0;i<6;i++){
+    document.getElementById('score'+(i+1)).textContent=(scores[i]>=0?'+':'')+scores[i];
+    document.getElementById('rank'+(i+1)).textContent=ranks[i]+'位';
+  }
+  document.getElementById('ranking').innerHTML=order.map((i,k)=>{
+    const [t,c]=judgment(scores[i]);
+    return `<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 8px;margin:4px 0;border-radius:8px;background:#f7faff;border:1px solid #dbe6f0">
+      <b>${k+1}位　${i+1}号艇</b><b style="font-size:19px;color:#07376f">${scores[i]>=0?'+':''}${scores[i]}</b>
+      <span class="tag ${c}">${t}</span></div>`;
+  }).join('');
+  document.getElementById('pick').textContent=(order[0]+1)+'号艇';
+  document.getElementById('topInfo').textContent=`1位 ${scores[order[0]]}点 / 2位 ${scores[order[1]]}点 / 3位 ${scores[order[2]]}点`;
+  document.getElementById('triple').textContent=order.slice(0,3).map(i=>i+1).join('-');
+}
+function resetAll(){
+  for(let i=0;i<6;i++)scores[i]=0;
+  for(let r=0;r<ROWS;r++)for(let b=0;b<6;b++)C[r][b]=0;
+  update();
+}
+function save(){
+  localStorage.setItem('boatCounterSite',JSON.stringify({scores:[...scores],C:C,venue:document.getElementById('venue').value,race:document.getElementById('race').value}));
+  alert('現在のカウントを保存しました。');
+}
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem('boatCounterSite')||'null');if(!d)return;
+    d.scores.forEach((v,i)=>scores[i]=v);
+    for(let r=0;r<ROWS;r++)for(let b=0;b<6;b++)C[r][b]=d.C?.[r]?.[b]||0;
+    document.getElementById('venue').value=d.venue||'';
+    document.getElementById('race').value=d.race||'';
+  }catch(e){}
+}
+load();update();
+</script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
